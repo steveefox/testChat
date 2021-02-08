@@ -15,4 +15,9 @@ extension UIFont {
         UIFont(name: "avenir", size: size)
     }
     
+    static func laoSangamMN(size: CGFloat) -> UIFont? {
+        UIFont(name: "Lao Sangam MN", size: size)
+    }
+    
+    
 }
