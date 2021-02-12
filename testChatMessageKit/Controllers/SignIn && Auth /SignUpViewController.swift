@@ -30,13 +30,68 @@ class SignUpViewController: UIViewController {
         return button
     }()
     
+    
+    weak var delegate: AuthNavigationDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupConstraints()
+        view.backgroundColor = .white
+        
+        signUpButton.addTarget(self,
+                               action: #selector(signUpButtonTapped),
+                               for: .touchUpInside)
+        loginButton.addTarget(self,
+                              action: #selector(loginButtonTapped),
+                              for: .touchUpInside)
+    }
+    
+    
+    @objc private func signUpButtonTapped() {
+        
+        AuthService.shared.register(email: emailTextField.text,
+                                    password: passwordTextField.text,
+                                    confirmPassword: confirmPasswordTextFiled.text) { result in
+            switch result {
+            case .success(let user):
+                self.showAlert(title: "Success", message: "You are register") {
+                    self.present(SetupProfileViewController(currentUser: user), animated: true, completion: nil)
+                }
+                
+            case .failure(let error):
+                self.showAlert(title: "Error", message: "\(error.localizedDescription)")
+            }
+        }
+    }
+    
+    @objc private func loginButtonTapped() {
+        dismiss(animated: true) {
+            self.delegate?.toLoginVc()
+        }
+    }
+}
+
+
+//MARK: -ShowAlert
+extension UIViewController {
+    
+    func showAlert(title: String, message: String, completion: @escaping () -> Void = {}) {
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        let okAction = UIAlertAction(title: "Ok", style: .default) { _ in
+            completion()
+        }
+        
+        
+        alertController.addAction(okAction)
+
+        present(alertController, animated: true, completion: nil)
     }
     
 }
+
 
 
 //MARK: -SetupConstraints
@@ -78,10 +133,6 @@ private extension SignUpViewController {
         ])
     }
 }
-
-
-
-
 
 //MARK: -SwiftUI
 import SwiftUI

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -20,10 +21,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
-        window?.rootViewController = ChatRequestViewController()
+        
+        if let user = Auth.auth().currentUser {
+            FirestoreService.shared.getUserData(user: user) { result in
+                switch result {
+                case .success(let myUser):
+                    let maintTabBarVC = MainTabBarController(currentUser: myUser)
+                    maintTabBarVC.modalPresentationStyle = .fullScreen
+                    self.window?.rootViewController = maintTabBarVC
+                case .failure(let error):
+                    self.window?.rootViewController = AuthViewController()
+                }
+            }
+        } else {
+            window?.rootViewController = AuthViewController()
+        }
+
         window?.makeKeyAndVisible()
-        
-        
         
         
     }

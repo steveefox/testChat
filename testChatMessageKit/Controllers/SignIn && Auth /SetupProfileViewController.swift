@@ -1,11 +1,7 @@
-//
-//  SetupProfileViewController.swift
-//  testChatMessageKit
-//
-//  Created by Nikita on 2.02.21.
-//
+
 
 import UIKit
+import FirebaseAuth
 
 class SetupProfileViewController: UIViewController {
     
@@ -23,14 +19,58 @@ class SetupProfileViewController: UIViewController {
     
     let goToChatsButton = UIButton(title: "Go to chats!", backgroundColor: .buttonDark(), titleColor: .white, cornerRadius: 4)
     
+    
+    private let currentUser: User
+    
+    init(currentUser: User) {
+        self.currentUser = currentUser
+        super.init(nibName: nil, bundle: nil)
+        
+        if let username = currentUser.displayName {
+            fullNameTextField.text = username
+        }
+        //TO do set google image
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .white
         setupConstraints()
+        
+        goToChatsButton.addTarget(self,
+                                  action: #selector(goToChatsButtonTapped),
+                                  for: .touchUpInside)
     }
-    
+
+    @objc private func goToChatsButtonTapped() {
+        
+        FirestoreService.shared.saveProfileWith(id: currentUser.uid,
+                                                email: currentUser.email!,
+                                                userName: fullNameTextField.text,
+                                                avatarImageString: "nil",
+                                                description: aboutMeTextField.text,
+                                                sex: sexSegmentedControl.titleForSegment(at: sexSegmentedControl.selectedSegmentIndex)) { result  in
+            switch result {
+            case .success(let myUser):
+                self.showAlert(title: "Успешно", message: "Приятного общения ") {
+                    let maintTabBarVC = MainTabBarController(currentUser: myUser)
+                    maintTabBarVC.modalPresentationStyle = .fullScreen
+                    self.present(maintTabBarVC, animated: true, completion: nil)
+                }
+                
+            case .failure(let error):
+                self.showAlert(title: "Error!", message: error.localizedDescription)
+            }
+        }
+    }
 }
+
+
 
 //MARK: -SetupConstraints
 private extension SetupProfileViewController {
@@ -87,7 +127,7 @@ struct SetupProfileVCProvider: PreviewProvider {
     
     struct ContainerView: UIViewControllerRepresentable {
         
-        let viewContoller = SetupProfileViewController()
+        let viewContoller = SetupProfileViewController(currentUser: Auth.auth().currentUser!)
         
         func makeUIViewController(context: Context) -> SetupProfileViewController {
             return viewContoller

@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import GoogleSignIn
 
 class LoginViewController: UIViewController {
     
@@ -24,13 +24,15 @@ class LoginViewController: UIViewController {
                             titleColor: .black,
                             isShadow: true)
     let loginButton = UIButton(title: "Login", backgroundColor: .buttonDark(), titleColor: .white)
-    let signInButton: UIButton = {
+    let signUpButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Sign In", for: .normal)
+        button.setTitle("Sign Up", for: .normal)
         button.setTitleColor(.buttonRed(), for: .normal)
         button.titleLabel?.font = .avenir(size:20)
         return button
     }()
+    
+    weak var delegate: AuthNavigationDelegate?
     
     let emailTextField = OneLineTextField(font: .avenir(size: 20))
     let passwordTextField = OneLineTextField(font: .avenir(size: 20))
@@ -42,8 +44,56 @@ class LoginViewController: UIViewController {
         googleButton.customizeGoogleButton()
         
         setupConstraints()
+        
+        loginButton.addTarget(self,
+                              action: #selector(loginButtonTapped),
+                              for: .touchUpInside)
+        signUpButton.addTarget(self,
+                              action: #selector(signUpButtonTapped),
+                              for: .touchUpInside)
+        googleButton.addTarget(self,
+                               action: #selector(googleButtonTapped),
+                               for: .touchUpInside)
+    }
+    
+    @objc private func loginButtonTapped() {
+        
+        AuthService.shared.login(email: emailTextField.text!,
+                                 password: passwordTextField.text!) { result  in
+            
+            switch result {
+            case .success(let user ):
+                self.showAlert(title: "Success", message: "You are authorize") {
+                    FirestoreService.shared.getUserData(user: user) { result in
+                        switch result {
+                        case .success(let myUser):
+                            print(myUser)
+                            let maintTabBarVC = MainTabBarController(currentUser: myUser)
+                            maintTabBarVC.modalPresentationStyle = .fullScreen
+                            self.present(maintTabBarVC, animated: true, completion: nil)
+                        case .failure(let error):
+                            self.present(SetupProfileViewController(currentUser: user), animated: true, completion: nil)
+                        }
+                    }
+                }
+            case .failure(let error):
+                self.showAlert(title: "Error", message: "\(error.localizedDescription)")
+            }
+        }
+    }
+    @objc private func signUpButtonTapped() {
+        
+        dismiss(animated: true) {
+            self.delegate?.toSignUpVc()
+        }
+    }
+    
+    @objc private func googleButtonTapped() {
+        GIDSignIn.sharedInstance()?.presentingViewController = self
+        GIDSignIn.sharedInstance().signIn()
     }
 }
+
 
 
 
@@ -69,8 +119,8 @@ private extension LoginViewController {
             ],
                                     axis: .vertical,
                                     spacing: 40)
-        signInButton.contentHorizontalAlignment = .leading
-        let bottomStackView = UIStackView(arrangedSubviews: [needAnAccountLabel,signInButton],
+        signUpButton.contentHorizontalAlignment = .leading
+        let bottomStackView = UIStackView(arrangedSubviews: [needAnAccountLabel,signUpButton],
                                           axis: .horizontal,
                                           spacing: 10)
         bottomStackView.alignment = .firstBaseline

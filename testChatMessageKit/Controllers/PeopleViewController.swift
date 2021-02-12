@@ -6,11 +6,15 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class PeopleViewController: UIViewController {
     
     
-    let users = Bundle.main.decode([MyUser].self, from: "users.json")
+    let currentUser: MyUser
+    
+//    let users = Bundle.main.decode([MyUser].self, from: "users.json")
+    let users: [MyUser] = []
     var collectionView: UICollectionView!
     var dataSource: UICollectionViewDiffableDataSource<Section, MyUser>!
     
@@ -25,6 +29,17 @@ class PeopleViewController: UIViewController {
         }
     }
     
+    
+    init(currentUser: MyUser) {
+        self.currentUser = currentUser
+        super.init(nibName: nil, bundle: nil)
+        title = currentUser.username
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -34,6 +49,26 @@ class PeopleViewController: UIViewController {
         setupSearchBar()
         createDataSource()
         reloadData(with: nil)
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Log Out",
+                                                            style: .plain,
+                                                            target: self,
+                                                            action: #selector(signOut))
+        
+    }
+    
+    @objc private func signOut() {
+        let alertController = UIAlertController(title: nil, message: "Are you sure want to sign out", preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alertController.addAction(UIAlertAction(title: "Sign Out", style: .destructive, handler: { _ in
+            do {
+                try Auth.auth().signOut()
+                UIApplication.shared.windows.filter { $0.isKeyWindow }.first?.rootViewController = AuthViewController()
+            } catch {
+                print("Error signing out: \(error.localizedDescription)")
+            }
+        }))
+        present(alertController, animated: true, completion: nil)
     }
     
     private func setupSearchBar() {

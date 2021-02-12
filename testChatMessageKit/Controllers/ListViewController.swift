@@ -10,8 +10,8 @@ import UIKit
 
 class ListViewController: UIViewController {
     
-    let activeChats = Bundle.main.decode([MyChat].self, from: "activeChats.json")
-    let waitingChats = Bundle.main.decode([MyChat].self, from: "waitingChats.json")
+//    let activeChats = Bundle.main.decode([MyChat].self, from: "activeChats.json")
+//    let waitingChats = Bundle.main.decode([MyChat].self, from: "waitingChats.json")
     
     enum Section: Int, CaseIterable {
         case waitingChats
@@ -27,9 +27,20 @@ class ListViewController: UIViewController {
         }
     }
     
-    
+    private let currentUser: MyUser
     var collectionView: UICollectionView!
     var dataSource: UICollectionViewDiffableDataSource<Section, MyChat >?
+    
+    
+    init(currentUser: MyUser) {
+        self.currentUser = currentUser
+        super.init(nibName: nil, bundle: nil)
+        title = currentUser.username
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,8 +78,8 @@ class ListViewController: UIViewController {
     private func reloadData() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, MyChat>()
         snapshot.appendSections([.waitingChats, .activeChats])
-        snapshot.appendItems(waitingChats, toSection: .waitingChats )
-        snapshot.appendItems(activeChats, toSection: .activeChats)
+//        snapshot.appendItems(waitingChats, toSection: .waitingChats )
+//        snapshot.appendItems(activeChats, toSection: .activeChats)
         
         dataSource?.apply(snapshot, animatingDifferences: true)
     }
