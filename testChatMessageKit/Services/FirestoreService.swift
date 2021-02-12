@@ -1,9 +1,4 @@
-//
-//  FireStoreService.swift
-//  testChatMessageKit
-//
-//  Created by Nikita on 11.02.21.
-//
+
 
 import Foundation
 import Firebase

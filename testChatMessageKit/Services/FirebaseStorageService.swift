@@ -1,9 +1,3 @@
-//
-//  FirebaseStorageService.swift
-//  testChatMessageKit
-//
-//  Created by Nikita on 12.02.21.
-//
 
 import Foundation
 import FirebaseAuth
