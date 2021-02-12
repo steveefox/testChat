@@ -96,8 +96,6 @@ extension SetupProfileViewController: UINavigationControllerDelegate, UIImagePic
     
 }
 
-
-
 //MARK: -SetupConstraints
 private extension SetupProfileViewController {
     func setupConstraints() {
