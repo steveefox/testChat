@@ -38,7 +38,7 @@ class FirestoreService {
         }
     }
     
-    func saveProfileWith(id: String, email: String, userName: String?, avatarImageString: String?, description: String?, sex: String?, completion: @escaping (Result<MyUser, Error>) -> Void) {
+    func saveProfileWith(id: String, email: String, userName: String?, avatarImage: UIImage?, description: String?, sex: String?, completion: @escaping (Result<MyUser, Error>) -> Void) {
         
         guard Validator.isFilled(username: userName, description: description, sex: sex)
         else {
@@ -46,22 +46,35 @@ class FirestoreService {
             return
         }
         
-        let myUser = MyUser(username: userName!,
+        var myUser = MyUser(username: userName!,
                             email: email,
                             description: description!,
                             sex: sex!,
                             avatarStringURL: "Not exist",
                             id: id)
         
-        self.usersRef.document(myUser.id).setData(myUser.representation) { error in
-            if let error = error {
-                completion(.failure(error))
-            } else {
-                completion(.success(myUser))
-            }
+        guard avatarImage != #imageLiteral(resourceName: "avatar")  else {
+            completion(.failure(UserError.photoNotExist))
+            return
         }
         
-    }
+        FirebaseStorageService.shared.upload(photo: avatarImage!) { result in
+            switch result {
+            case .success(let url):
+                myUser.avatarStringURL = url.absoluteString
+                self.usersRef.document(myUser.id).setData(myUser.representation) { error in
+                    if let error = error {
+                        completion(.failure(error))
+                    } else {
+                        completion(.success(myUser))
+                    }
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        } // storageService
+        
+    } // saveProfileWith
     
     
 }
