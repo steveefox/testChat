@@ -1,9 +1,4 @@
-//
-//  LoginViewController.swift
-//  testChatMessageKit
-//
-//  Created by Nikita on 2.02.21.
-//
+
 
 import UIKit
 import GoogleSignIn
