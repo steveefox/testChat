@@ -1,9 +1,4 @@
-//
-//   MyUser.swift
-//  testChatMessageKit
-//
-//  Created by Nikita on 8.02.21.
-//
+
 
 import Foundation
 import FirebaseFirestore
