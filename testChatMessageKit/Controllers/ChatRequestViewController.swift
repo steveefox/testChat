@@ -50,6 +50,7 @@ class ChatRequestViewController: UIViewController {
         setupConstraints()
         
         denyButton.addTarget(self, action: #selector(denyButtonTapped), for: .touchUpInside)
+        acceptButton.addTarget(self, action: #selector(acceptButtonTapped), for: .touchUpInside)
     }
     
     override func viewWillLayoutSubviews() {
@@ -73,13 +74,13 @@ class ChatRequestViewController: UIViewController {
     }
     
     @objc private func denyButtonTapped() {
-        dismiss(animated: true) {
+        self.dismiss(animated: true) {
             self.delegate?.remove(waitingChat: self.chat)
         }
     }
     
     @objc private func acceptButtonTapped() {
-        dismiss(animated: true) {
+        self.dismiss(animated: true) {
             self.delegate?.changeToActive(waitingChat: self.chat)
         }
     }

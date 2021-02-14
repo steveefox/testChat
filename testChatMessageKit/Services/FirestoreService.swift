@@ -17,8 +17,12 @@ class FirestoreService {
         dataBase.collection("users")
     }
     
-    private var waitingChatsRefference: CollectionReference {
+    private var waitingChatsReference: CollectionReference {
         dataBase.collection(["users", currentUser.id, "waitingChats"].joined(separator: "/"))
+    }
+    
+    private var activeChatsReference: CollectionReference {
+        dataBase.collection(["users", currentUser.id, "activeChats"].joined(separator: "/"))
     }
     
     var currentUser: MyUser!
@@ -109,7 +113,7 @@ class FirestoreService {
     
     
     func deleteWaitingChat(chat: MyChat, completion: @escaping (Result<Void, Error>) -> Void) {
-        waitingChatsRefference.document(chat.friendId).delete { error  in
+        waitingChatsReference.document(chat.friendId).delete { error  in
             if let error = error {
                 completion(.failure(error))
                 return
@@ -119,8 +123,34 @@ class FirestoreService {
         }
     }
     
+    
+    func changeToActiveChat(chat: MyChat, completion: @escaping (Result<Void, Error>) -> Void) {
+        getWaitingChatMessages(myChat: chat) { result  in
+            switch result {
+            case .success(let messages):
+                self.deleteWaitingChat(chat: chat) { result in
+                    switch result {
+                    case .success():
+                        self.createActiveChat(chat: chat, messages: messages) { result  in
+                            switch result {
+                            case .success():
+                                completion(.success(Void()))
+                            case .failure(let error):
+                                completion(.failure(error))
+                            }
+                        }
+                    case .failure(let error ):
+                        completion(.failure(error))
+                    }
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
     private func deleteMessages(myChat: MyChat, completion: @escaping (Result<Void, Error>) -> Void) {
-        let reference = waitingChatsRefference.document(myChat.friendId).collection("messages")
+        let reference = waitingChatsReference.document(myChat.friendId).collection("messages")
         getWaitingChatMessages(myChat: myChat) { result in
             switch result {
             case .success(let messages ):
@@ -142,7 +172,7 @@ class FirestoreService {
     
     private func getWaitingChatMessages(myChat: MyChat, completion: @escaping (Result<[MyMessage], Error>) -> Void) {
         
-        let reference = waitingChatsRefference.document(myChat.friendId).collection("messages")
+        let reference = waitingChatsReference.document(myChat.friendId).collection("messages")
         var messages: [MyMessage] = []
         
         reference.getDocuments { querySnapshot, error  in
@@ -155,6 +185,26 @@ class FirestoreService {
                 messages.append(message)
             }
             completion(.success(messages))
+        }
+    }
+    
+    private func createActiveChat(chat: MyChat, messages: [MyMessage], completion: @escaping (Result<Void, Error>) -> Void) {
+        
+        let messageReference = activeChatsReference.document(chat.friendId).collection("messages")
+        activeChatsReference.document(chat.friendId).setData( chat.representation) { error  in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            for message in messages {
+                messageReference.addDocument(data: message.representation) { error in
+                    if let error = error {
+                        completion(.failure(error))
+                        return
+                    }
+                    completion(.success(Void()))
+                }
+            }
         }
     }
 }
