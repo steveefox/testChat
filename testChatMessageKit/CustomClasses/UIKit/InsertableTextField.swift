@@ -71,25 +71,25 @@ class InsertableTextField: UITextField {
 
 
 //MARK: -SwiftUI
-import SwiftUI
-
-struct TextFieldVCProvider: PreviewProvider {
-    static var previews: some View {
-        ContainerView().edgesIgnoringSafeArea(.all)
-    }
-    
-    struct ContainerView: UIViewControllerRepresentable {
-        
-        let viewContoller = ProfileViewController()
-        
-        func makeUIViewController(context: Context) -> ProfileViewController {
-            return viewContoller
-        }
-        
-        func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-            
-        }
-        
-    }
-    
-}
+//import SwiftUI
+//
+//struct TextFieldVCProvider: PreviewProvider {
+//    static var previews: some View {
+//        ContainerView().edgesIgnoringSafeArea(.all)
+//    }
+//    
+//    struct ContainerView: UIViewControllerRepresentable {
+//        
+//        let viewContoller = ProfileViewController()
+//        
+//        func makeUIViewController(context: Context) -> ProfileViewController {
+//            return viewContoller
+//        }
+//        
+//        func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+//            
+//        }
+//        
+//    }
+//    
+//}

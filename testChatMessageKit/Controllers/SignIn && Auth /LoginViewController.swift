@@ -66,7 +66,7 @@ class LoginViewController: UIViewController {
                             let maintTabBarVC = MainTabBarController(currentUser: myUser)
                             maintTabBarVC.modalPresentationStyle = .fullScreen
                             self.present(maintTabBarVC, animated: true, completion: nil)
-                        case .failure(let error):
+                        case .failure(_):
                             self.present(SetupProfileViewController(currentUser: user), animated: true, completion: nil)
                         }
                     }

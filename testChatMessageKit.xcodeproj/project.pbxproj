@@ -34,6 +34,9 @@
 		841EFBC825D1836600FDB534 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 841EFBC725D1836600FDB534 /* GoogleService-Info.plist */; };
 		8462708025D696C700D9F89C /* FirebaseStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8462707F25D696C700D9F89C /* FirebaseStorageService.swift */; };
 		8462708325D698D800D9F89C /* UIImage + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8462708225D698D800D9F89C /* UIImage + Extension.swift */; };
+		8462708D25D951F700D9F89C /* ListenerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8462708C25D951F700D9F89C /* ListenerService.swift */; };
+		846270AA25D972E600D9F89C /* MyMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846270A925D972E600D9F89C /* MyMessage.swift */; };
+		846270E025D98DE500D9F89C /* WaitingChatsNavigationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846270DF25D98DE500D9F89C /* WaitingChatsNavigationDelegate.swift */; };
 		84756B9D25C6F40A00105EE9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84756B9C25C6F40A00105EE9 /* AppDelegate.swift */; };
 		84756B9F25C6F40A00105EE9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84756B9E25C6F40A00105EE9 /* SceneDelegate.swift */; };
 		84756BA125C6F40A00105EE9 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84756BA025C6F40A00105EE9 /* AuthViewController.swift */; };
@@ -89,6 +92,9 @@
 		841EFBC725D1836600FDB534 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8462707F25D696C700D9F89C /* FirebaseStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorageService.swift; sourceTree = "<group>"; };
 		8462708225D698D800D9F89C /* UIImage + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage + Extension.swift"; sourceTree = "<group>"; };
+		8462708C25D951F700D9F89C /* ListenerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListenerService.swift; sourceTree = "<group>"; };
+		846270A925D972E600D9F89C /* MyMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMessage.swift; sourceTree = "<group>"; };
+		846270DF25D98DE500D9F89C /* WaitingChatsNavigationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingChatsNavigationDelegate.swift; sourceTree = "<group>"; };
 		84756B9925C6F40A00105EE9 /* testChatMessageKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = testChatMessageKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84756B9C25C6F40A00105EE9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		84756B9E25C6F40A00105EE9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -141,6 +147,7 @@
 				841B232225D51F8E00CAC60E /* AuthService.swift */,
 				841B233125D5467A00CAC60E /* FirestoreService.swift */,
 				8462707F25D696C700D9F89C /* FirebaseStorageService.swift */,
+				8462708C25D951F700D9F89C /* ListenerService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -171,6 +178,7 @@
 			children = (
 				841EFB9D25D081DE00FDB534 /* SelfConfiguringCell.swift */,
 				841B232E25D5441B00CAC60E /* AuthNavigationDelegate.swift */,
+				846270DF25D98DE500D9F89C /* WaitingChatsNavigationDelegate.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -180,6 +188,7 @@
 			children = (
 				841EFBA925D1215700FDB534 /* MyUser.swift */,
 				841EFBAC25D1216300FDB534 /* MyChat.swift */,
+				846270A925D972E600D9F89C /* MyMessage.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -461,6 +470,7 @@
 				84756BA125C6F40A00105EE9 /* AuthViewController.swift in Sources */,
 				841EFBBF25D145B300FDB534 /* ChatRequestViewController.swift in Sources */,
 				84756BDC25C93B1500105EE9 /* SetupProfileViewController.swift in Sources */,
+				8462708D25D951F700D9F89C /* ListenerService.swift in Sources */,
 				84756B9D25C6F40A00105EE9 /* AppDelegate.swift in Sources */,
 				84756BC925C7176500105EE9 /* ButtonFormView.swift in Sources */,
 				84756BDF25C93D9900105EE9 /* AddPhotoView.swift in Sources */,
@@ -468,6 +478,7 @@
 				841B234B25D5500400CAC60E /* UserError.swift in Sources */,
 				841EFBBC25D141D900FDB534 /* UIView + Extension.swift in Sources */,
 				84756BC225C7075300105EE9 /* UIImageView + Extension.swift in Sources */,
+				846270AA25D972E600D9F89C /* MyMessage.swift in Sources */,
 				841B233225D5467A00CAC60E /* FirestoreService.swift in Sources */,
 				841EFB9925D080CC00FDB534 /* WaitingChatCell.swift in Sources */,
 				841EFBB025D12CC000FDB534 /* UserCell.swift in Sources */,
@@ -481,6 +492,7 @@
 				841B232325D51F8E00CAC60E /* AuthService.swift in Sources */,
 				841B232725D525D400CAC60E /* Validator.swift in Sources */,
 				841EFB9E25D081DE00FDB534 /* SelfConfiguringCell.swift in Sources */,
+				846270E025D98DE500D9F89C /* WaitingChatsNavigationDelegate.swift in Sources */,
 				84756BCC25C71C5500105EE9 /* UIStackView + Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
